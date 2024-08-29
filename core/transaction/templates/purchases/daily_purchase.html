@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} Daily Purchase Summary {% endblock title %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Summary Section -->
+    <div class="text-center text-danger font-weight-bold mb-4" style="font-size: 2.5rem; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+        Daily Purchase Summary for {{ current_date }}
+    </div>
+
+    <div class="row mb-4">
+        <!-- Total Purchases -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="small-box bg-success text-white rounded d-flex flex-column justify-content-between" style="height: 80px;">
+                <div class="inner">
+                    <h5 class="font-weight-bold mb-2">Total Purchases</h5>
+                    <h3 class="font-weight-bold">Tzs {{ total_purchases }}</h3>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Chart -->
+    <div id="chart-container" class="my-4 d-flex justify-content-center align-items-center border border-secondary rounded" style="height: 45vh; padding: 15px;">
+        <canvas id="purchase-chart"></canvas>
+    </div>
+    
+    <!-- Loading Chart JS -->
+    <script src="{% static 'static/js/Chart.min.js' %}"></script>  
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('purchase-chart').getContext('2d');
+
+            // Create a gradient for the bars
+            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(40, 167, 69, 0.5)'); // Light green
+            gradient.addColorStop(1, 'rgba(40, 167, 69, 0.9)'); // Darker green
+
+            var purchaseData = {
+                labels: {{ labels|safe }},
+                datasets: [{
+                    label: 'Purchase Amount',
+                    data: {{ data|safe }},
+                    backgroundColor: gradient,  // Apply the gradient
+                    borderColor: 'rgba(40, 167, 69, 1)', // Complementary green border
+                    borderWidth: 1
+                }]
+            };
+
+            var barConfig = {
+                type: 'bar',
+                data: purchaseData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#000',
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Purchase Bill No',
+                                color: '#000',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#000',
+                                font: {
+                                    size: 12
+                                },
+                                callback: function(value) { return 'Tzs ' + value; }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Amount (Tzs)',
+                                color: '#000',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `Amount: Tzs ${tooltipItem.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, barConfig);
+        });
+    </script>
+</div><!-- /.container -->
+{% endblock content %}
+
+<!-- Custom CSS -->
+<style>
+    .container {
+        padding: 0 15px;
+    }
+
+    .small-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: background-color 0.3s ease;
+        background-color: #28a745;
+    }
+
+    .small-box:hover {
+        background-color: #1e7e34;
+    }
+
+    .small-box .inner {
+        margin-bottom: 10px;
+    }
+
+    .small-box .icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 3rem;
+        opacity: 0.2;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    #chart-container {
+        border-width: 2px;
+        border-color: #4F102B;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        #chart-container {
+            height: 40vh;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .text-center {
+            font-size: 1.8rem;
+        }
+
+        .small-box {
+            height: auto;
+            padding: 15px;
+        }
+
+        .small-box .icon {
+            font-size: 2.5rem;
+        }
+    }
+</style>

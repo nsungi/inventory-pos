@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Product Form{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-primary">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Fill the form to add product</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        <div class="form-group mb-3">
+                            {{ form.name.label_tag }}
+                            {{ form.name }}
+                            {{ form.name.errors }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ form.image.label_tag }}
+                            {{ form.image }}
+                            {{ form.image.errors }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ form.price.label_tag }}
+                            {{ form.price }}
+                            {{ form.price.errors }}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            {{ form.quantity_in_stock.label_tag }}
+                            {{ form.quantity_in_stock }}
+                            {{ form.quantity_in_stock.errors }}
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-2">Save</button>
+                            <a href="{% url 'product-list' %}" class="btn btn-secondary mx-3">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control {
+        border-radius: .25rem;
+        border: 1px solid #ced4da;
+        padding: .375rem .75rem;
+    }
+    .form-control-file {
+        border: 1px solid #ced4da;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .invalid-feedback {
+        display: block;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} New Purchase {% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="text-gray font-weight-bold mb-4">New Purchase</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">Supplier Details</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="id_name">Supplier Name:</label>
+                    <input type="text" class="form-control" id="id_name" value="{{ supplier.name }}" disabled>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="id_phone">Phone No:</label>
+                        <input type="text" class="form-control" id="id_phone" value="{{ supplier.phone }}" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_gstin">GSTIN No:</label>
+                        <input type="text" class="form-control" id="id_gstin" value="{{ supplier.gstin }}" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" class="card">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            <div class="card-header bg-gray text-dark">Product Details</div>
+            <div class="card-body" id="stockitem">
+                {% for form in formset %}
+                <div class="row form-row clone-row mb-3">
+                    <div class="form-group col-md-6">
+                        {{ form.stock.errors }}
+                        <label for="{{ form.stock.id_for_label }}">Stock:</label>
+                        {{ form.stock }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="{{ form.perprice.id_for_label }}">Price per item:</label>
+                        {{ form.perprice }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form.quantity.errors }}
+                        <label for="{{ form.quantity.id_for_label }}">Quantity:</label>
+                        {{ form.quantity }}
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>Price:</label>
+                        <input type="text" class="form-control totalprice" value="1" disabled required>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>.</label>
+                        <button type="button" class="btn btn-danger form-control remove-form-row">-</button>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="text-right mb-3">
+                    <a href="#" class="add-form-row btn btn-success">+ Add More</a>
+                </div>
+            </div>
+
+            <div class="card-footer text-right">
+                <button type="submit" class="btn btn-success">Add to Purchases</button>
+                <a href="{% url 'transaction:select-supplier' %}" class="btn btn-secondary">Go Back</a>
+                <a href="{% url 'transaction:purchases-list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Custom JS to add and remove item forms -->
+    <script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/dialogbox.js' %}"></script>
+    <script>
+        var custom_alert = new custom_alert();
+
+        function updateElementIndex(el, prefix, ndx) {
+            var id_regex = new RegExp('(' + prefix + '-\\d+)');
+            var replacement = prefix + '-' + ndx;
+            if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+            if (el.id) el.id = el.id.replace(id_regex, replacement);
+            if (el.name) el.name = el.name.replace(id_regex, replacement);
+        };
+
+        function cloneMore(selector, prefix) {
+            var newElement = $(selector).clone(true);
+            var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+            newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+                var name = $(this).attr('name');
+                if (name) {
+                    name = name.replace('-' + (total-1) + '-', '-' + total + '-');
+                    var id = 'id_' + name;
+                    $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                }
+            });
+            newElement.find('label').each(function() {
+                var forValue = $(this).attr('for');
+                if (forValue) {
+                    forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+                    $(this).attr({'for': forValue});
+                }
+            });
+            total++;
+            $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+            $(selector).after(newElement);
+            return false;
+        }
+        
+        function deleteForm(prefix, btn) {
+            var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+            if (total > 1) {
+                btn.closest('.clone-row').remove();
+                var forms = $('.clone-row');
+                $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+                for (var i = 0, formCount = forms.length; i < formCount; i++) {
+                    $(forms.get(i)).find(':input').each(function() {
+                        updateElementIndex(this, prefix, i);
+                    });
+                }
+                total--;
+            } else {
+                custom_alert.render('Field cannot be deleted');
+            }
+            return false;
+        };
+                
+        $(document).on('click', '.add-form-row', function(e) {
+            e.preventDefault();
+            cloneMore('.clone-row:last', 'form');
+            return false;
+        });
+        
+        $(document).on('click', '.remove-form-row', function(e) {
+            e.preventDefault();
+            deleteForm('form', $(this));
+            return false;
+        });
+
+        $(document).on('change', '.setprice', function(e) {
+            e.preventDefault();
+            var element = $(this);
+            var quantity = element.parents('.form-row').find('.quantity').val();
+            var perprice = element.parents('.form-row').find('.price').val();
+            var tprice = quantity * perprice;
+            element.parents('.form-row').find('.totalprice').val(tprice);
+            return false;
+        });
+    </script>
+{% endblock content %}

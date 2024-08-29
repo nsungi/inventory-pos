@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container my-4">
+        <h1 class="text-center mb-4  bg-success">Daily Sales Report</h1>
+        
+        <div class="text-center mb-4">
+            <h2 class="text-black p-3 rounded">
+                Total Sales for {{ current_date }}: Tzs {{ total_sales }}
+            </h2>
+        </div>
+        
+        <!-- Chart container with inline styles for better responsiveness -->
+        <div style="position: relative; margin: auto; height: 50vh; width: 100%; max-width: 800px;">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('barChart').getContext('2d');
+            var salesData = JSON.parse('{{ sales_data|escapejs }}');
+
+            // Check if salesData is properly formatted
+            console.log(salesData);
+
+            var labels = salesData.map(function(item) {
+                return item['time__date'];
+            });
+            var data = salesData.map(function(item) {
+                return item.total;
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Sales',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            },
+                            ticks: {
+                                autoSkip: true,
+                                maxRotation: 90,
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Total Sales'
+                            },
+                            ticks: {
+                                callback: function(value) { return 'Tzs ' + value; }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `Total Sales: Tzs ${tooltipItem.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

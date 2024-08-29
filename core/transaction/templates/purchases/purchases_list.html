@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Purchases List {% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
+                <h3 class="text-primary font-weight-bold">Purchases List</h3>
+            </div>
+            <div class="col-md-4 text-md-right">
+                <a class="btn btn-primary" href="{% url 'transaction:select-supplier' %}">New Incoming Stock</a>
+            </div>
+        </div>
+
+        <table class="table table-striped table-bordered">
+            <thead class="thead-gray">
+                <tr>
+                    <th width="10%">Bill No</th>
+                    <th width="15%">Supplier</th>
+                    <th width="15%">Stocks Purchased</th>
+                    <th width="10%">Quantity Purchased</th>
+                    <th width="15%">Total Purchased Price</th>
+                    <th width="10%">Purchased Date</th>
+                    <th width="25%">Options</th>
+                </tr>
+            </thead>
+
+            {% if bills %}
+            <tbody>
+                {% for purchase in bills %}
+                <tr>
+                    <td class="align-middle">
+                        <h5>{{ purchase.billno }}</h5>
+                    </td>
+                    <td class="align-middle">
+                        {% if purchase.supplier.is_deleted %}
+                            {{ purchase.supplier }}<br>
+                        {% else %}
+                            <a href="{% url 'transaction:supplier' purchase.supplier.name %}">{{ purchase.supplier }}</a><br>
+                        {% endif %}
+                        <small class="text-muted">Ph No: {{ purchase.supplier.phone }}</small>
+                    </td>
+                    <td class="align-middle">
+                        {% for item in purchase.get_items_list %}
+                            {{ item.stock.name }}<br>
+                        {% endfor %}
+                    </td>
+                    <td class="align-middle">
+                        {% for item in purchase.get_items_list %}
+                            {{ item.quantity }}<br>
+                        {% endfor %}
+                    </td>
+                    <td class="align-middle">{{ purchase.get_total_price }}</td>
+                    <td class="align-middle">{{ purchase.time.date }}</td>
+                    <td class="align-middle">
+                        <a href="{% url 'transaction:purchase-bill' purchase.billno %}" class="btn btn-info">View Bill</a>
+                        {% if request.user.is_superuser %}
+                            <a href="{% url 'transaction:delete-purchase' purchase.pk %}" class="btn btn-danger">Delete Bill</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% else %}
+            <tbody>
+                <tr>
+                    <td colspan="7" class="text-center text-muted">Oops!!!, such empty</td>
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+
+        {% if is_paginated %}
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-outline-info" href="?page=1">First</a>
+                    <a class="btn btn-outline-info" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+            </div>
+            <div>
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a class="btn btn-info" href="?page={{ num }}">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a class="btn btn-outline-info" href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-outline-info" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    <a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock content %}

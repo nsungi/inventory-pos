@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-between align-items-center mb-4">
+        <div class="col-md-8">
+            <h3 class="display-5">Available Product</h3>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'product-create' %}" class="btn btn-primary btn-lg">Add New Product</a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-secondary">
+                <tr>
+                    <th scope="col">#</th> <!-- Serial Number Column -->
+                    <th scope="col">Name</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <!-- Serial Number -->
+                    <td>{{ product.name }}</td>
+                    <td>
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail" style="width: 100px; height: auto;">
+                    </td>
+                    <td>Tzs {{ product.price }}</td>
+                    <td>{{ product.quantity_in_stock }}</td>
+                    <td>{{ product.created_at }}</td>
+                    <td>
+                        <a href="{% url 'product-detail' product.pk %}" class="btn btn-info btn-sm">View</a>
+                        <a href="{% url 'product-update' product.pk %}" class="btn btn-warning btn-sm mx-2">Edit</a>
+                        <a href="{% url 'product-delete' product.pk %}" class="btn btn-danger btn-sm mx-2">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No products found. Please add new products.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

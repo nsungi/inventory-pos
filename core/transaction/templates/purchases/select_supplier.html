@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} New Purchase {% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="text-gray font-weight-bold mb-4">New Purchase</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {% for field in form.visible_fields %}
+                    <div class="form-group mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-success">Next</button>
+                <a href="{% url 'transaction:purchases-list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Expense Detail{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Expense Details</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9">{{ expense.id }}</dd>
+
+                        <dt class="col-sm-3">Date</dt>
+                        <dd class="col-sm-9">{{ expense.date }}</dd>
+
+                        <dt class="col-sm-3">Category</dt>
+                        <dd class="col-sm-9">{{ expense.category }}</dd>
+
+                        <dt class="col-sm-3">Amount</dt>
+                        <dd class="col-sm-9">Tzs {{ expense.amount }}</dd>
+
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">{{ expense.description }}</dd>
+                    </dl>
+                    <a href="{% url 'transaction:list' %}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

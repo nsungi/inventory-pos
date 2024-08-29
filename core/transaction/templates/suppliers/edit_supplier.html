@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="text-center mb-4" style="color: #ea2088; font-weight: bold; font-size: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+        {{ title }}
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">Name:</label>
+            {{ form.name }}
+            <div class="text-danger">{{ form.name.errors }}</div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="{{ form.phone.id_for_label }}">Phone No:</label>
+                {{ form.phone }}
+                <div class="text-danger">{{ form.phone.errors }}</div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="{{ form.email.id_for_label }}">Email ID:</label>
+                {{ form.email }}
+                <div class="text-danger">{{ form.email.errors }}</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.address.id_for_label }}">Address:</label>
+            {{ form.address }}
+            <div class="text-danger">{{ form.address.errors }}</div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.gstin.id_for_label }}">GSTIN No:</label>
+            {{ form.gstin }}
+            <div class="text-danger">{{ form.gstin.errors }}</div>
+        </div>
+
+        <br>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <button type="submit" class="btn btn-info">{{ savebtn }}</button>
+                {% if title == "New Supplier" %}
+                    <button type="reset" class="btn btn-success">Reset</button>
+                {% endif %}
+            </div>
+            <div>
+                {% if delbtn %}
+                    <a href="{% url 'transaction:delete-supplier' supplier.pk %}" class="btn btn-danger">Delete Supplier</a>
+                {% endif %}
+                <a href="{% url 'transaction:suppliers-list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

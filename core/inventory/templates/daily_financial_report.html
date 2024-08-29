@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %} Daily Financial Report {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="my-4 text-center text-info font-weight-bold" style="font-size: 1.5rem; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+        Daily Financial Report - {{ report_date }}
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-md-12">
+
+            <!-- Canvas for Chart.js -->
+            <div id="daily-financial-chart-container" class="my-4 d-flex justify-content-center align-items-center border border-secondary rounded" style="height: 50vh; padding: 20px;">
+                <canvas id="daily-financial-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('daily-financial-chart').getContext('2d');
+        var dailyFinancialChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [ 'Sales', 'Purchases', 'Expenses', 'Profit'],
+                datasets: [{
+                    label: 'Daily Financial Summary',
+                    data: [
+                        //{{ total_inventory }},
+                        {{ total_sales }},
+                        {{ total_purchases }},
+                        {{ total_expenses }},
+                        {{ profit }}
+                    ],
+                    backgroundColor: [
+                       // 'rgba(54, 162, 235, 0.2)',   // Inventory
+                        'rgba(255, 99, 132, 0.2)',    // Sales
+                        'rgba(255, 159, 64, 0.2)',    // Purchases
+                        'rgba(75, 192, 192, 0.2)',    // Expenses
+                        'rgba(153, 102, 255, 0.2)'    // Profit
+                    ],
+                    borderColor: [
+                        //'rgba(54, 162, 235, 1)',      // Inventory
+                        'rgba(255, 99, 132, 1)',      // Sales
+                        'rgba(255, 159, 64, 1)',      // Purchases
+                        'rgba(75, 192, 192, 1)',      // Expenses
+                        'rgba(153, 102, 255, 1)'      // Profit
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Category'
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Amount'
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            },
+                            callback: function(value) {
+                                return 'Tzs ' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock content %}
+
+<!-- Custom CSS -->
+<style>
+    #daily-financial-chart-container {
+        border-width: 2mm;
+        border-color: #4F102B;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    @media (max-width: 768px) {
+        #daily-financial-chart-container {
+            height: 40vh;
+        }
+    }
+</style>

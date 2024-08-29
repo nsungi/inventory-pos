@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inventory List {% endblock title %}
+
+{% block content %}
+    
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h4 class="text-primary">Available Inventory</h4>
+            </div>
+            <div class="col-md-4 text-md-right">
+                {% if request.user.is_superuser %}
+                    <a class="btn btn-primary" href="{% url 'inventory:new-stock' %}">Add New Stock</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="border-bottom mb-4"></div>
+        
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                {% render_field filter.form.name class="form-control" placeholder="Search by stock name" %}
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-gray">
+                    <tr>
+                        <th>Stock Name</th>
+                        <th>Current Stock</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                {% if object_list %}
+                <tbody>
+                    {% for stock in object_list %}
+                    <tr>
+                        <td>{{ stock.name }}</td>
+                        <td>{{ stock.quantity }}</td>
+                        <td>
+                         
+                                <a href="{% url 'inventory:edit-stock' stock.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'inventory:delete-stock' stock.pk %}" class="btn btn-danger btn-sm mx-3">Delete</a>
+                       
+                               <!---------- <span class="text-muted">No actions available</span>  ---->
+                         
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% else %}
+                <tbody>
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">No inventory items found</td>
+                    </tr>
+                </tbody>
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="text-center">
+            {% if is_paginated %}
+                <div class="btn-group" role="group">
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-outline-info" href="?page=1">First</a>
+                        <a class="btn btn-outline-info" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <a class="btn btn-info" href="?page={{ num }}">{{ num }}</a>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a class="btn btn-outline-info" href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-outline-info" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        <a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}

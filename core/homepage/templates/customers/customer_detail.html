@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ customer.customer_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2 class="card-title">{{ customer.customer_name }}</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead"><strong>Email:</strong> {{ customer.email|default:"N/A" }}</p>
+                    <p class="lead"><strong>Phone Number:</strong> {{ customer.phone_number }}</p>
+                    <p class="lead"><strong>Location:</strong> {{ customer.location }}</p>
+                    <p class="lead"><strong>Created At:</strong> {{ customer.created_at|date:"Y-m-d H:i" }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'customer-update' customer.pk %}" class="btn btn-warning mr-2">Edit</a>
+                    <a href="{% url 'customer-delete' customer.pk %}" class="btn btn-danger mr-2">Delete</a>
+                    <a href="{% url 'customer-list' %}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

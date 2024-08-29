@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Add/Edit Note{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Add/Edit Note</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.title.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.description.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-info me-2">Save</button>
+                            <a href="{% url 'note-list' %}" class="btn btn-secondary mx-3">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control {
+        border-radius: .25rem;
+        border: 1px solid #ced4da;
+        box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.125);
+        padding: .375rem .75rem;
+    }
+    .description-field {
+        max-height: 4.5rem; /* Adjust height as needed for two lines */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .form-label {
+        font-weight: bold;
+    }
+    .invalid-feedback {
+        display: block;
+    }
+</style>
+{% endblock %}

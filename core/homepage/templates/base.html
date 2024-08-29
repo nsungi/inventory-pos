@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}XYZ | Dashboard{% endblock %}</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="{% static 'https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' %}">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/jqvmap/jqvmap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'assets/plugins/summernote/summernote-bs4.css' %}">
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+<!-- Navbar -->
+<nav class="main-header navbar navbar-expand navbar-white navbar-light custom-navbar">
+  <!-- Left navbar links -->
+  <ul class="navbar-nav">
+      <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+          <a href="{% url 'home' %}" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+          <a href="#" class="nav-link">Contact</a>
+      </li>
+  </ul>
+
+  <!-- SEARCH FORM -->
+  <form class="form-inline mx-auto">
+      <div class="input-group input-group-sm">
+          <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+              <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+              </button>
+          </div>
+      </div>
+  </form>
+
+  <!-- Right navbar links -->
+  <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+              
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              <a href="#" class="dropdown-item">
+                  <!-- Message Start -->
+                  <div class="media">
+                      
+                      <div class="media-body">
+                     
+                          <p class="text-sm"> </p>
+                          <p class="text-sm text-muted"> </p>
+                      </div>
+                  </div>
+                  <!-- Message End -->
+              </a>
+              <!-- More messages -->
+          </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+          
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+             
+              <!-- More notifications -->
+          </div>
+      </li>
+  </ul>
+</nav>
+<!-- /.navbar -->
+
+<!-- Custom CSS -->
+<style>
+  .custom-navbar {
+      height: 70px; /* Increase navbar height */
+      padding: 0 1rem; /* Add padding to left and right */
+  }
+
+  .custom-navbar .navbar-nav .nav-link {
+      margin: 0 0.5rem; /* Add margin to navbar items */
+  }
+
+  .custom-navbar .form-inline {
+      width: 100%; /* Center search form */
+  }
+</style>
+
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4 pt-4 mb-4">
+    <!-- Brand Logo -->
+    <a href="{% url 'home' %}" class="brand-link">
+      <img src="{% static 'assets/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text font-weight-light">XYZ</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-4 pb-3 mb-4 d-flex">
+        <div class="image">
+          <img src="{% static 'assets/dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">{{ request.user.username }}</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Dashboard -->
+          <li class="nav-item has-treeview menu-open pb-2">
+            <a href="{% url 'home' %}"  class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <!-- Additional dashboard items -->
+            </ul>
+          </li>
+   
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-warehouse"></i>
+                <p>
+                    Inventory
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview pt-3">
+                <li class="nav-item pb-2">
+                    <a href="{% url 'inventory:inventory' %}" class="nav-link">
+                        <i class="nav-icon fas fa-boxes"></i>
+                        <p>Available Inventory</p>
+                    </a>
+                </li>
+                <li class="nav-item pb-2">
+                    <a href="{% url 'inventory:new-stock' %}" class="nav-link">
+                        <i class="nav-icon fas fa-plus-square"></i>
+                        <p>Add New Stock</p>
+                    </a>
+                </li>
+                <li class="nav-item pb-2">
+                    <a href="{% url 'inventory:inventory-report' %}" class="nav-link">
+                        <i class="nav-icon fas fa-chart-bar"></i>
+                        <p>Inventory Reports</p>
+                    </a>
+                </li>
+                 
+            </ul>
+        </li>
+          <li class="nav-item has-treeview pt-4">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-cash-register"></i>
+                <p>
+                    Sales
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview pt-3">
+                <li class="nav-item pb-2">
+                    <a href="{% url 'transaction:sales-list' %}" class="nav-link">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>Sales Orders</p>
+                    </a>
+                </li>
+                <li class="nav-item pb-2">
+                    <a href="{% url 'transaction:new-sale' %}" class="nav-link">
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>New Outgoing Stock</p>
+                    </a>
+                </li>
+                <li class="nav-item pb-2">
+                    <a href="{% url 'transaction:daily_sales' %}" class="nav-link">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>Daily Sales</p>
+                    </a>
+                </li>
+                <li class="nav-item pb-2">
+                    <a href="{% url 'transaction:sales_report' %}" class="nav-link">
+                        <i class="nav-icon fas fa-poll"></i>
+                        <p>Sales report</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-treeview pt-3">
+          <a href="#" class="nav-link">
+            <i class="nav-icon far fa-plus-square"></i>
+            <p>
+              Supplier
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item pb-2">
+              <a href="{% url 'transaction:suppliers-list' %}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Available Supplier</p>
+              </a>
+            </li>
+           
+            <li class="nav-item pb-2">
+              <a href="{% url 'transaction:new-supplier' %}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add Supplier</p> 
+              </a>
+            </li>
+          </ul>
+
+        
+        <li class="nav-item has-treeview pt-3">
+          <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>
+                  Purchases
+                  <i class="fas fa-angle-left right"></i>
+              </p>
+          </a>
+          <ul class="nav nav-treeview pt-3">
+              <li class="nav-item pb-2">
+                  <a href="{% url 'transaction:purchases-list' %}" class="nav-link">
+                      <i class="nav-icon fas fa-box"></i>
+                      <p>Available Purchases</p>
+                  </a>
+              </li>
+              <li class="nav-item pb-2">
+                  <a href="{% url 'transaction:select-supplier' %}" class="nav-link">
+                      <i class="nav-icon fas fa-truck"></i>
+                      <p>New Incoming Stock</p>
+                  </a>
+              </li>
+              <li class="nav-item pb-2">
+                  <a href="{% url 'transaction:daily-purchases' %}" class="nav-link">
+                      <i class="nav-icon fas fa-file-alt"></i>
+                      <p>Purchase Reports</p>
+                  </a>
+              </li>
+              
+          </ul>
+      </li>
+
+      <li class="nav-item has-treeview pt-3">
+        <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-dollar-sign"></i>
+            <p>
+                Expenses
+                <i class="fas fa-angle-left right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview pt-3">
+            <li class="nav-item pb-2">
+                <a href="{% url 'transaction:create' %}" class="nav-link">
+                    <i class="nav-icon fas fa-plus-circle"></i>
+                    <p>Add Expense</p>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+                <a href="{% url 'transaction:list' %}" class="nav-link">
+                    <i class="nav-icon fas fa-list-ul"></i>
+                    <p>Expense List</p>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+                <a href="{% url 'transaction:report' %}" class="nav-link">
+                    <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                    <p>Expense Reports</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    
+    <li class="nav-item has-treeview">
+      <a href="#" class="nav-link">
+        <i class="nav-icon far fa-envelope"></i>
+        <p>
+          Financial
+          <i class="fas fa-angle-left right"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview pt-2">
+        <li class="nav-item pb-2">
+          <a href="{% url 'inventory:daily-financial-report' %}" class="nav-link">
+            <i class="nav-icon far fa-image"></i>
+            <p>Today report</p>
+          </a>
+        </li>
+        <li class="nav-item pb-2">
+          <a href="{% url 'inventory:general-financial-report' %}"  class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>Overall report</p>
+          </a>
+        </li>
+                </ul>
+              </li>
+            
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon far fa-plus-square"></i>
+                  <p>
+                    My Account
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Logout</p>
+                    </a>
+                  </li>
+                  {% if request.user.is_superuser %}
+                  <li class="nav-item">
+                    <a href="{% url 'admin:index' %}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Administration</p> 
+                    </a>
+                  </li>
+                  {% endif %}
+                  <li class="nav-item">
+                    <a href="{% url 'password_change' %}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Change Password</p>
+                    </a>
+                  </li>
+ 
+               
+                </ul>
+              </li>
+              <li class="nav-header">Others</li>
+              <li class="nav-item">
+                <a href="{% url 'inventory:guide' %}" class="nav-link">
+                  <i class="nav-icon fas fa-file"></i>
+                  <p>Guideline</p>
+                </a>
+              </li>
+              <li class="nav-item pb-2">
+                <a href="{% url 'note-list' %}" class="nav-link">
+                    <i class="nav-icon fas fa-list-ul"></i>
+                    <p>Note List</p>
+                </a>
+            </li>
+            <li class="nav-item pb-2">
+              <a href="{% url 'customer-list' %}" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>Customer List</p>
+              </a>
+          </li>
+          <li class="nav-item pb-2">
+            <a href="{% url 'product-list' %}" class="nav-link">
+                <i class="nav-icon fas fa-list-ul"></i>
+                <p>Product List</p>
+            </a>
+        </li>
+        
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">{% block page_title %}Dashboard{% endblock %}</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">{% block breadcrumb %}Dashboard{% endblock %}</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+      <div class="container-fluid">
+        {% block content %}
+        <!-- Page content goes here -->
+        {% endblock %}
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-inline">
+      Anything you want
+    </div>
+    <strong>Copyright &copy; 2024 <a href="#">Your Company</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+<style>
+  .nav-link .nav-icon {
+      color: #28a745; /* Green for icons */
+      transition: color 0.3s ease;
+  }
+  
+  .nav-link:hover .nav-icon {
+      color: #0056b3; /* Darker blue when hovered */
+  }
+  
+  .nav-link.active .nav-icon {
+      color:#007bff; /* Blue  color for active item */
+  }
+  </style>
+  
+
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+<!-- OPTIONAL SCRIPTS -->
+<script src="{% static 'assets/plugins/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'assets/dist/js/demo.js' %}"></script>
+</body>
+</html>

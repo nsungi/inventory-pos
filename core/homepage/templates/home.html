@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <!-- Welcome Message -->
+        <div class="my-4 text-center text-secondary font-weight-bold" style="font-size: 1.8rem; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+            Hello & Welcome, {{ request.user.username }}
+        </div>
+
+        <!-- Main Content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small Boxes (Stat boxes) -->
+                <div class="row mb-4">
+                    <!-- Total Sales -->
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                        <div class="small-box bg-white text-black rounded p-4 d-flex flex-column justify-content-between" style="height: 160px;">
+                            <div class="inner">
+                                <h5 class="font-weight-bold mb-2">Today Sales :</h5>
+                                <h4 class="font-weight-bold text-primary">Tzs {{ total_sales }}</h4>
+
+                               <!---- <h5 class="font-weight-bold mb-2">Total Sales for {{ current_date }}:</h5> -->
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag" style="font-size: 3rem;"></i>
+                            </div>
+                            <a href="{% url 'transaction:sales-list' %}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- Total Purchases -->
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                        <div class="small-box bg-white text-white rounded p-4 d-flex flex-column justify-content-between" style="height: 160px;">
+                            <div class="inner">
+                                <h5 class="font-weight-bold mb-2">Today Purchases :</h5>
+                                <h4 class="font-weight-bold text-info">Tzs {{ total_purchases }}</h4>
+                                <!---------  <h5 class="font-weight-bold mb-2">Total Purchases for {{ current_date }}:</h5>---------->
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars" style="font-size: 3rem;"></i>
+                            </div>
+                            <a href="{% url 'transaction:purchases-list' %}" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- Total Expenses -->
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                        <div class="small-box bg-white text-warning rounded p-4 d-flex flex-column justify-content-between" style="height: 160px;">
+                            <div class="inner">
+                                <h5 class="font-weight-bold mb-2">Today Expenses:</h5>
+                                <h4 class="font-weight-bold text-warning">Tzs {{ total_expenses }}</h4>
+                                <!------  <h5 class="font-weight-bold mb-2">Total Expenses for {{ current_date }}:</h5>------>
+
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-cash" style="font-size: 3rem;"></i>
+                            </div>
+                            <a href="{% url 'transaction:list' %}" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- Today Profit -->
+                    <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                        <div class="small-box bg-white text-success rounded p-4 d-flex flex-column justify-content-between" style="height: 160px;">
+                            <div class="inner">
+                                <h5 class="font-weight-bold mb-2">Today Profit</h5>
+                                <h4 class="font-weight-bold text-success">Tzs {{ daily_profit }}</h4>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph" style="font-size: 3rem;"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-white">More info <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <!-- Chart Section -->
+                <div id="container" class="my-4 d-flex justify-content-center align-items-center border border-secondary rounded" style="height: 45vh; padding: 15px;">
+                    <canvas id="bar-graph"></canvas>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <a href="{% url 'transaction:select-supplier' %}" class="btn btn-success btn-lg btn-block">New Incoming Stock</a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="{% url 'transaction:new-sale' %}" class="btn btn-primary btn-lg btn-block">New Outgoing Stock</a>
+                    </div>
+                </div>
+
+                <!-- Recent Sales, Purchases, and Expenses -->
+                <div class="row">
+                    <!-- Most Recent Sales -->
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center text-danger font-weight-bold mb-3" style="font-size: 1.5em; border-bottom: 2px solid #ddd;">
+                            Most Recent Sales
+                        </div>
+                        <div class="list-group">
+                            {% for item in sales %}
+                                <a href="{% url 'transaction:sale-bill' item.billno %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="font-weight-bold">Bill No: {{ item.billno }}</div>
+                                        <div>Purchased by {{ item.name }}</div>
+                                        <small>{{ item.time.date }}</small>
+                                    </div>
+                                    <span class="badge badge-primary badge-pill">{{ item.get_total_price }}</span>
+                                </a>
+                            {% empty %}
+                                <div class="list-group-item">No recent sales</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Most Recent Purchases -->
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center text-danger font-weight-bold mb-3" style="font-size: 1.5em; border-bottom: 2px solid #ddd;">
+                            Most Recent Purchases
+                        </div>
+                        <div class="list-group">
+                            {% for item in purchases %}
+                                <a href="{% url 'transaction:purchase-bill' item.billno %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="font-weight-bold">Bill No: {{ item.billno }}</div>
+                                        <div>Purchased by {{ item.supplier.name }}</div>
+                                        <small>{{ item.time.date }}</small>
+                                    </div>
+                                    <span class="badge badge-primary badge-pill">{{ item.get_total_price }}</span>
+                                </a>
+                            {% empty %}
+                                <div class="list-group-item">No recent purchases</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Most Recent Expenses -->
+                     
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center text-danger font-weight-bold mb-3" style="font-size: 1.5em; border-bottom: 2px solid #ddd;">
+                            Most Recent Expenses
+                        </div>
+                        <div class="list-group">
+                            {% for item in expenses %}
+                                <a href="{% url 'transaction:expense-detail' item.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <div class="font-weight-bold">Category: {{ item.category.name }}</div>
+                                        <div>Supplier: {{ item.supplier }}</div>
+                                        <small>{{ item.date }}</small>
+                                    </div>
+                                    <span class="badge badge-primary badge-pill">Tzs {{ item.amount }}</span>
+                                </a>
+                            {% empty %}
+                                <div class="list-group-item">No recent expenses</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section><!-- /.content -->
+
+    </div><!-- /.container-fluid -->
+
+<!-- Loading Chart JS -->
+<script src="{% static 'static/js/Chart.min.js' %}"></script>  
+<script>
+    Chart.defaults.global.defaultFontColor = '#000'; // Change font color for better readability
+
+    // Function to create gradient colors
+    function createGradient(ctx, colorStart, colorEnd) {
+        var gradient = ctx.createLinearGradient(0, 0, 0, 400); // Vertical gradient
+        gradient.addColorStop(0, colorStart);
+        gradient.addColorStop(1, colorEnd);
+        return gradient;
+    }
+
+    // Configuration for the bar graph
+    var barConfig = {
+        type: 'bar',
+        data: {
+            datasets: [{
+                // Create gradient colors for each bar
+                backgroundColor: function(context) {
+                    var ctx = context.chart.ctx;
+                    return createGradient(ctx, 'rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 0.5)'); // Light teal gradient
+                },
+                borderColor: function(context) {
+                    var ctx = context.chart.ctx;
+                    return createGradient(ctx, 'rgba(75, 192, 192, 1)', 'rgba(75, 192, 192, 1)'); // Solid teal border
+                },
+                borderWidth: 1,
+                label: 'Stock in Inventory',
+                data: {{ data|safe }},
+            }],
+            labels: {{ labels|safe }}
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#000', // Black color for x-axis labels
+                        font: {
+                            size: 12 // Font size for x-axis labels
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Item',
+                        color: '#000', // Black color for x-axis title
+                        font: {
+                            size: 14 // Font size for x-axis title
+                        }
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: '#000', // Black color for y-axis labels
+                        font: {
+                            size: 12 // Font size for y-axis labels
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Quantity',
+                        color: '#000', // Black color for y-axis title
+                        font: {
+                            size: 14 // Font size for y-axis title
+                        }
+                    },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return `Stock: ${tooltipItem.raw}`;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    // Runs all charts on loading the webpage
+    window.onload = function() {
+        var ctx = document.getElementById('bar-graph').getContext('2d');
+        new Chart(ctx, barConfig);
+    };
+</script>
+
+
+{% endblock content %}
+
+<!-- Custom CSS -->
+<style>
+    .container-fluid {
+        padding: 0 15px;
+    }
+
+    .small-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .small-box:hover {
+        background-color: #17a2b8;
+    }
+
+    .small-box .inner {
+        margin-bottom: 10px;
+    }
+
+    .small-box .icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 3rem;
+        opacity: 0.2;
+    }
+
+    .small-box .small-box-footer {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.1);
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+    }
+
+    #container {
+        border-width: 2mm;
+        border-color: #4F102B;
+        border-radius: 30px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-lg {
+        padding: 1rem;
+    }
+
+    .list-group-item {
+        padding: 10px 15px;
+    }
+
+    .list-group-item:last-child {
+        border-bottom: 0;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
