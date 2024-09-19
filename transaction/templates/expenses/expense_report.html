@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} Expense Report {% endblock title %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Title Section -->
+    <h1 class="text-center mb-3">Expense Report for {{ current_date }}</h1>
+
+    <!-- Back Button -->
+    <div class="mb-4 text-center">
+        <a href="{% url 'transaction:list' %}" class="btn btn-secondary btn-lg">Back to Expenses List</a>
+    </div>
+
+    <!-- Total Expenses Alert -->
+    <div class="alert alert-info mb-2">
+        <h5 class="alert-heading">Total Expenses:</h5>
+        <p class="mb-0">Tzs {{ total_expenses }}</p>
+    </div>
+
+    <!-- Chart Section -->
+    <div style="position: relative; margin: auto; height: 40vh; width: 100%; max-width: 800px;">
+        <canvas id="expense-chart"></canvas>
+    </div>
+
+    <!-- Loading Chart JS -->
+    <script src="{% static 'static/js/Chart.min.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('expense-chart').getContext('2d');
+
+            // Create a gradient for the bars
+            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(255, 99, 132, 0.2)'); // Light red
+            gradient.addColorStop(1, 'rgba(255, 99, 132, 0.7)'); // Darker red
+
+            var expenseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ categories|safe }},
+                    datasets: [{
+                        label: 'Expense Amounts by Category',
+                        data: {{ amounts|safe }},
+                        backgroundColor: gradient,  // Apply the gradient
+                        borderColor: 'rgba(255, 99, 132, 1)', // Solid red border
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Expense Categories',
+                                color: 'black'
+                            },
+                            ticks: {
+                                color: 'black',
+                                autoSkip: true,
+                                maxRotation: 90,
+                                minRotation: 45
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Amount (Tzs)',
+                                color: 'black'
+                            },
+                            ticks: {
+                                color: 'black',
+                                callback: function(value) { return 'Tzs ' + value; }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `Amount: Tzs ${tooltipItem.raw}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock content %}
+
+<!-- Custom CSS -->
+<style>
+    .container {
+        padding: 0 20px;
+    }
+
+    .alert {
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        background-color: #f8f9fa;
+        border-color: #d6d6d6;
+    }
+
+    .alert-heading {
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        margin: 0 10px;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        border-radius: 5px;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+</style>

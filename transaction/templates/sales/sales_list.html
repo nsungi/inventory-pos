@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Available Sales {% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h4 class="text-primary font-weight-bold">Available Sales</h4>
+            </div>
+            <div class="col-md-4 text-md-right">
+                <a class="btn btn-primary" href="{% url 'transaction:new-sale' %}">New Outgoing Stock</a>
+            </div>
+        </div>
+        
+        {% if bills %}
+            <table class="table table-striped">
+                <thead class="thead-secondary">
+                    <tr>
+                        <th scope="col">Bill No</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Stocks Sold</th>
+                        <th scope="col">Quantity Sold</th>
+                        <th scope="col">Total Sold Price</th>
+                        <th scope="col">Sale Date</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in bills %}
+                        <tr>
+                            <td><h5>{{ sale.billno }}</h5></td>
+                            <td>
+                                {{ sale.name }}<br>
+                                <small class="text-muted">Ph No: {{ sale.phone }}</small>
+                            </td>
+                            <td>
+                                {% for item in sale.get_items_list %}
+                                    {{ item.stock.name }}<br>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for item in sale.get_items_list %}
+                                    {{ item.quantity }}<br>
+                                {% endfor %}
+                            </td>
+                            <td>{{ sale.get_total_price }}</td>
+                            <td>{{ sale.time.date }}</td>
+                            <td>
+                                <a href="{% url 'transaction:sale-bill' sale.billno %}" class="btn btn-info">View Bill</a>
+                                {% if request.user.is_superuser %}
+                                    <a href="{% url 'transaction:delete-sale' sale.pk %}" class="btn btn-danger mx-3">Delete Bill</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center">
+                {% if is_paginated %}
+                    <div class="btn-group">
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-outline-info" href="?page=1">First</a>
+                            <a class="btn btn-outline-info" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <a class="btn btn-info" href="?page={{ num }}">{{ num }}</a>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <a class="btn btn-outline-info" href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-outline-info" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="btn btn-outline-info" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="text-center mt-5">
+                <h4 class="text-danger font-weight-bold">Oops!!! No sales available.</h4>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

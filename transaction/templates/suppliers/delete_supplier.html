@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %} Delete Supplier {% endblock title %}
+
+{% block content %}
+
+    <div class="m-4 p-4">  
+
+    <form method="post" >
+        {% csrf_token %}
+        
+        <fieldset class="form-group">
+            <div style="color: #ea2088; font-weight: bold; font-size: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Delete Supplier</div>
+            <br>
+            <h4 class="mx-4">Are you sure you want to delete the supplier "<strong>{{ object.name }}</strong>"?</h4>
+        </fieldset>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn ghost-red btn-danger">Yes, Delete</button>
+            <a href="{% url 'transaction:suppliers-list' %}" class="btn ghost-button btn-secondary mx-4">Cancel</a>
+        </div>
+        
+    </form>
+
+</div>
+
+{% endblock content %}

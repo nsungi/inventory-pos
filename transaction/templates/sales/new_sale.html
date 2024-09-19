@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} New Sale {% endblock title %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="text-center mb-4" style="color:#ea2088; font-weight: bold; font-size: 1.8rem; border-bottom: 1px solid white;">New Sale</div>
+    
+    <form method="post" class="panel panel-default">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="panel-heading panel-heading-text">Customer Details</div>
+        <div class="panel-body">
+            
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}" class="panel-body-text">Customer Name:</label>
+                {{ form.name }}
+                {{ form.name.errors }}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6"> 
+                    <label for="{{ form.phone.id_for_label }}" class="panel-body-text">Phone No:</label>
+                    {{ form.phone }}
+                    {{ form.phone.errors }}
+                </div>
+                <div class="form-group col-md-6">              
+                    <label for="{{ form.email.id_for_label }}" class="panel-body-text">Email:</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.address.id_for_label }}" class="panel-body-text">Address:</label>
+                {{ form.address }}
+                {{ form.address.errors }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.gstin.id_for_label }}" class="panel-body-text">GSTIN No:</label>
+                {{ form.gstin }}
+                {{ form.gstin.errors }}
+            </div>
+        </div>
+
+        <br>
+
+        <div class="panel panel-default">
+            {{ formset.management_form }}
+
+            <div class="panel-heading panel-heading-text">Product Details</div>
+            <div id="stockitem"> 
+                <div class="panel-body">
+                {% for iform in formset %}
+                    <div class="row form-row clone-row">
+                        <div class="form-group col-md-6">
+                            <label class="panel-body-text">Stock:</label>
+                            {{ iform.stock }}
+                            {{ iform.stock.errors }}
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="panel-body-text">Price per item:</label>
+                            {{ iform.perprice }}
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="panel-body-text">Quantity:</label>
+                            {{ iform.quantity }}
+                            {{ iform.quantity.errors }}
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="panel-body-text">Price:</label>
+                            <input type="text" class="textinput form-control totalprice" value="1" disabled required>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="panel-body-text" style="color: #000">.</label>
+                            <button class="form-control btn btn-danger remove-form-row">-</button>
+                        </div>
+                    </div>
+                {% endfor %}
+                    <div class="text-right mt-2">                    
+                        <a href="#" class="add-form-row">+ Add More</a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Add to Sales</button>
+                <a href="{% url 'transaction:sales-list' %}" class="btn btn-warning">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

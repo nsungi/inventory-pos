@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} User Guide {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="my-4 text-center text-primary font-weight-bold" style="font-size: 1.8rem; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+        User Guide
+    </div>
+
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#overview">Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#creating-expense">Creating and Managing Expenses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#inventory-management">Inventory Management</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reports">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#financial-analysis">Financial Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#daily-reports">Daily Reports</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Overview Section -->
+            <div id="overview" class="my-4">
+                <h2 class="text-primary">Overview</h2>
+                <p>This Financial and Inventory Management System allows users to efficiently manage and analyze their financial transactions and inventory levels. The system provides functionality for tracking expenses, generating various financial reports, and viewing real-time inventory data.</p>
+            </div>
+
+            <!-- Creating and Managing Expenses Section -->
+            <div id="creating-expense" class="my-4">
+                <h2 class="text-primary">Creating and Managing Expenses</h2>
+                <p>To create and manage expenses:</p>
+                <ol>
+                    <li><strong>Creating Expenses</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Create Expense</strong> page.</li>
+                            <li>Fill in the details such as Date, Category, Amount, Description, and Supplier.</li>
+                            <li>Click <strong>Save Expense</strong> to add the expense or <strong>Cancel</strong> to discard.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Managing Expenses</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Expenses List</strong> page.</li>
+                            <li>View, edit, or delete expenses from the list. Use the <strong>Details</strong> button for more information.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <img src="{% static 'images/create-expense.png' %}" class="img-fluid" alt="Creating Expenses Page">
+                <img src="{% static 'images/manage-expenses.png' %}" class="img-fluid" alt="Managing Expenses Page">
+            </div>
+
+            <!-- Inventory Management Section -->
+            <div id="inventory-management" class="my-4">
+                <h2 class="text-primary">Inventory Management</h2>
+                <p>To manage inventory and view reports:</p>
+                <ol>
+                    <li><strong>Managing Inventory</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Inventory</strong> page.</li>
+                            <li>View, add, or remove items from the inventory.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Inventory Report</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Inventory Report</strong> page.</li>
+                            <li>View the bar chart displaying the current stock levels of inventory items.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <img src="{% static 'images/inventory-management.png' %}" class="img-fluid" alt="Inventory Management Page">
+                <img src="{% static 'images/inventory-report.png' %}" class="img-fluid" alt="Inventory Report Page">
+            </div>
+
+            <!-- Reports Section -->
+            <div id="reports" class="my-4">
+                <h2 class="text-primary">Financial Reports</h2>
+                <p>To access financial reports:</p>
+                <ol>
+                    <li><strong>General Financial Report</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Financial Reports</strong> page.</li>
+                            <li>View the bar graph with data for inventory, sales, purchases, expenses, and profits.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Daily Financial Report</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Daily Financial Report</strong> page.</li>
+                            <li>View the line chart displaying daily financial summaries.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <img src="{% static 'images/general-financial-report.png' %}" class="img-fluid" alt="General Financial Report Page">
+                <img src="{% static 'images/daily-financial-report.png' %}" class="img-fluid" alt="Daily Financial Report Page">
+            </div>
+
+            <!-- Financial Analysis Section -->
+            <div id="financial-analysis" class="my-4">
+                <h2 class="text-primary">Financial Analysis</h2>
+                <p>The financial analysis section helps you understand the performance of your business through various reports:</p>
+                <ul>
+                    <li><strong>Inventory Analysis</strong>: Review the current stock levels and their impact on finances.</li>
+                    <li><strong>Expense Analysis</strong>: Analyze expense trends and their effects on overall financial health.</li>
+                    <li><strong>Sales and Purchases Analysis</strong>: Compare sales and purchase data to evaluate business performance.</li>
+                </ul>
+                <img src="{% static 'images/financial-analysis.png' %}" class="img-fluid" alt="Financial Analysis Page">
+            </div>
+
+            <!-- Daily Reports Section -->
+            <div id="daily-reports" class="my-4">
+                <h2 class="text-primary">Daily Reports</h2>
+                <p>The daily reports provide insights into daily financial activities:</p>
+                <ul>
+                    <li><strong>Accessing Daily Reports</strong>:
+                        <ul>
+                            <li>Navigate to the <strong>Daily Reports</strong> section.</li>
+                            <li>Review daily summaries of sales, purchases, expenses, and profits.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <img src="{% static 'images/daily-reports.png' %}" class="img-fluid" alt="Daily Reports Page">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- Custom CSS -->
+<style>
+    .nav-link {
+        font-size: 1.1rem;
+    }
+
+    .nav-link.active {
+        font-weight: bold;
+        color: #007bff !important;
+    }
+
+    .my-4 {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .nav-link {
+            font-size: 1rem;
+        }
+    }
+</style>

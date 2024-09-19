@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Note List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Note List</h1>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4">Your Notes</h2>
+                <a href="{% url 'note-create' %}" class="btn btn-primary">Add New Note</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th> <!-- Serial Number Column -->
+                            <th>Title</th>
+                            <th>Description</th>  
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in notes %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td> <!-- Serial Number -->
+                            <td>{{ note.title }}</td>
+                            <td>{{ note.description|slice:":50" }}{% if note.description|length > 50 %}...{% endif %}</td> <!-- Description with truncation -->
+                            <td>{{ note.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'note-detail' note.pk %}" class="btn btn-info btn-sm">View</a>
+                                    <a href="{% url 'note-update' note.pk %}" class="btn btn-warning btn-sm mx-3">Edit</a>
+                                    <a href="{% url 'note-delete' note.pk %}" class="btn btn-danger btn-sm mx-3">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No notes available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

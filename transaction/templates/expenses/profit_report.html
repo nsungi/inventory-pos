@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+
+
+{% block title %} Profit Report {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="my-4 text-center text-primary font-weight-bold" style="font-size: 2.5rem; border-bottom: 3px solid #e9ecef; padding-bottom: 10px;">
+        Profit Report for {{ current_date }}
+    </div>
+
+    <!-- Summary Section -->
+    <div class="row mb-4">
+        <!-- Total Sales -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+            <div class="small-box bg-info text-white rounded p-3 d-flex flex-column justify-content-between" style="height: 150px;">
+                <div class="inner">
+                    <h5 class="font-weight-bold mb-2">Total Sales:</h5>
+                    <h4 class="font-weight-bold">Tzs {{ total_sales }}</h4>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Cost of Goods Sold -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+            <div class="small-box bg-warning text-dark rounded p-3 d-flex flex-column justify-content-between" style="height: 150px;">
+                <div class="inner">
+                    <h5 class="font-weight-bold mb-2">Cost of Goods Sold:</h5>
+                    <h4 class="font-weight-bold">Tzs {{ total_cogs }}</h4>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-archive"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Total Expenses -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+            <div class="small-box bg-danger text-white rounded p-3 d-flex flex-column justify-content-between" style="height: 150px;">
+                <div class="inner">
+                    <h5 class="font-weight-bold mb-2">Total Expenses:</h5>
+                    <h4 class="font-weight-bold">Tzs {{ total_expenses }}</h4>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-cash"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profit Section -->
+    <div class="alert alert-success">
+        <h4 class="alert-heading">Profit:</h4>
+        <p class="font-weight-bold">Tzs {{ profit }}</p>
+    </div>
+
+    <!-- Profit Chart Section -->
+    <div class="my-4">
+        <div id="profit-chart-container" class="border border-secondary rounded p-3" style="height: 50vh;">
+            <canvas id="profit-chart"></canvas>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+<!-- Loading Chart JS -->
+<script src="{% static 'static/js/Chart.min.js' %}"></script>  
+<script>
+    Chart.defaults.global.defaultFontColor = '#000'; // Font color
+
+    // Configuration for the profit chart
+    var profitChartConfig = {
+        type: 'bar',
+        data: {
+            labels: ['Total Sales', 'COGS', 'Total Expenses', 'Profit'],
+            datasets: [{
+                label: 'Amount (Tzs)',
+                backgroundColor: ['#17a2b8', '#ffc107', '#dc3545', '#28a745'],
+                data: [{{ total_sales }}, {{ total_cogs }}, {{ total_expenses }}, {{ profit }}],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#000', // Black color for x-axis labels
+                        font: {
+                            size: 14 // Font size for x-axis labels
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Categories',
+                        color: '#000', // Black color for x-axis title
+                        font: {
+                            size: 16 // Font size for x-axis title
+                        }
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: '#000', // Black color for y-axis labels
+                        font: {
+                            size: 14 // Font size for y-axis labels
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Amount (Tzs)',
+                        color: '#000', // Black color for y-axis title
+                        font: {
+                            size: 16 // Font size for y-axis title
+                        }
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // Runs the chart on page load
+    window.onload = function() {
+        var ctx = document.getElementById('profit-chart').getContext('2d');
+        new Chart(ctx, profitChartConfig);
+    };
+</script>
+
+<!-- Custom CSS -->
+<style>
+    .container-fluid {
+        padding: 0 15px;
+    }
+
+    .alert {
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .small-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 5px;
+        padding: 15px;
+    }
+
+    .small-box .inner {
+        margin-bottom: 10px;
+    }
+
+    .small-box .icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 2.5rem;
+        opacity: 0.2;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    #profit-chart-container {
+        border-width: 2mm;
+        border-color: #4F102B;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa;
+    }
+</style>

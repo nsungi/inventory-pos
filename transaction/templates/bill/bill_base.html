@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/bootstrap.min.css' %}">
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-dy06yw1tT45gWKRbD+BZauNEwO0lB5lgxXeXQtN7RcMKkVxY6ZpDjv3JpLVnFTZf/m8deU4EP3T5lz1k2K72rg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Main CSS, Sidebar CSS, Bill CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'static/css/main.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'static/css/sidebar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'static/css/bill.css' %}">
+   
+</head>
+
+<body class="bg">
+
+    <main id="wrapper">
+     
+
+        <div id="content" class="bg-black">
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    
+                    <div class="container">
+                        {% block content %}{% endblock content %}
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </main>    
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'static/bootstrap/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static 'static/bootstrap/popper.min.js' %}"></script>
+    <script src="{% static 'static/bootstrap/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

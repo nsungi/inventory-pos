@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} Delete Sale {% endblock title %}
+
+{% block content %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <fieldset class="form-group">
+            <div style="color: #ea2088; font-weight: bold; font-size: 2.5rem; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Delete Sale Bill</div>
+            <br>
+            <h2>Are you sure you want to delete the Sale Bill No: <strong>{{ object.billno }}</strong>?</h2>
+        </fieldset>
+
+        <div class="form-group mt-4">  
+            <button type="submit" class="btn ghost-red">Yes, Delete</button>
+            <a href="{% url 'transaction:sales-list' %}" class="btn ghost-button">Cancel</a>
+        </div>
+        
+    </form>
+
+{% endblock content %}
