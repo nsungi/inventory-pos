@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: pos
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        value: "sqlite:///db.sqlite3"
