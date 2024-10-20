@@ -8,7 +8,7 @@ aiosqlite==0.20.0
 
 # Messaging and concurrency
 amqp==5.1.1
-anyio==4.4.0
+anyio==3.6.2  # Compatible with Python 3.11
 appdirs==1.4.4
 
 # Utilities
@@ -37,8 +37,6 @@ django-tinymce==3.6.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.1
 gunicorn==21.2.0
-
-# Additional packages
 django-widget-tweaks  # For custom widget tweaks in forms, no version specified
 
 # Image handling
@@ -51,8 +49,7 @@ seaborn==0.12.2  # For statistical data visualization
 plotly==5.11.0  # For interactive plots
 
 # Bootstrap integration
-django-bootstrap4==1.0.3  # For Bootstrap 4 support
-django-bootstrap5==2.3.2  # For Bootstrap 5 support
+django-bootstrap4==24.4  # Use the latest version
 
 # Frontend packages
 django-webpack-loader==1.0.0  # For Webpack integration
