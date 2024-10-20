@@ -156,14 +156,12 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
  
 
-STATIC_URL = '/static/'  # Make sure this is set correctly
-
-STATIC_ROOT = '/static/'  # Absolute path
-
-# Specify the path to your custom static files directory
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
 
 
 

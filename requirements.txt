@@ -204,7 +204,6 @@ PyQt5-sip==12.12.1
 pyRFC3339==1.1
 pyrit==0.5.1
 PySocks==1.7.1
-python-apt==2.4.0+ubuntu3
 python-bidi==0.4.2
 python-dateutil==2.9.0.post0
 python-debian==0.1.43+ubuntu1.1
@@ -283,3 +282,6 @@ XlsxWriter==3.2.0
 yarl==1.9.4
 zipp==1.0.0
 zopfli==0.2.3
+Django>=4.0
+gunicorn
+psycopg2-binary  # Required for PostgreSQL
